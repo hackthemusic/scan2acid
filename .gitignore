@@ -1,0 +1,9 @@
+*.pyc
+__pycache__/
+.env
+.conf
+localtests/
+303_sysx_bak/
+TODO
+scans/
+exports/*

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{TITLE}}</title>
+    <style>
+        :root { color-scheme: dark; }
+        body { font-family: Arial, sans-serif; background: #0f0f0f; color: #f0f0f0; margin: 2rem; }
+        h1 { text-align: center; margin-bottom: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #444; padding: 0.5rem; text-align: center; }
+        thead th { background-color: #1f1f1f; }
+        tbody th { background-color: #1a1a1a; text-align: left; }
+        tbody tr:nth-child(even) td { background-color: #121212; }
+        tbody tr:nth-child(odd) td { background-color: #1a1a1a; }
+        .sequence-table { --step-count: 1; --attribute-width: 12ch; }
+        .sequence-table thead tr,
+        .sequence-table tbody tr {
+            display: grid;
+            grid-template-columns: var(--attribute-width) repeat(var(--step-count), minmax(0, 1fr));
+        }
+        .sequence-table thead th:first-child,
+        .sequence-table tbody th {
+            white-space: nowrap;
+        }
+        .sequence-table tbody tr.source-row td {
+            font-family: "Courier New", Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{SEQUENCE_NAME}}</h1>
+    <table class="sequence-table" style="--step-count: {{STEP_COUNT}}; --attribute-width: {{ATTRIBUTE_WIDTH}};">
+        <thead>
+            <tr>{{HEADER_CELLS}}</tr>
+        </thead>
+        <tbody>
+{{BODY_ROWS}}
+        </tbody>
+    </table>
+</body>
+</html>
