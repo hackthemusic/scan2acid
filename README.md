@@ -34,6 +34,22 @@ This tool is a working proof of concept of alternative ways of generating music.
 - **Implementing control via arguments**: so far, the tool is interactive only. However, it would be nice to be able to run it with arguments (e.g., to parse a scan and export it to HTML in one command), and for automating this tool with other tools.
 - **Implementing triplets and other rhythmic figures**. So far, only straight 16th notes are supported. 
 
+## License
+
+This project is licensed under the CC-BY-SA 4.0 License. To sum it up:
+
+You are free to:
+- Share — copy and redistribute the material in any medium or format for any purpose, even commercially.
+- Adapt — remix, transform, and build upon the material for any purpose, even commercially.
+- The licensor cannot revoke these freedoms as long as you follow the license terms.
+
+Under the following terms:
+- Attribution — You must give appropriate credit , provide a link to the license, and indicate if changes were made . You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+- No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+
+For more details on this license, you can visit the [Creative Commons site](https://creativecommons.org/licenses/by-sa/4.0/) or read the full license text in the `LICENSE` file.
+
 ---
 
 Happy (musical) hacking!
