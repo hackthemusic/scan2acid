@@ -19,12 +19,43 @@ This project is currently being used and tested on Ubuntu 25.04 with a Mackie On
 
 This program uses an interactive CLI (so far; check next steps for more info). To run it, execute:
 ```bash
-python scan2acid.py
+python3 scan2acid.py
 ```
 From there, you can play demo sequences or parse already existing network scans (in nmap XML format). The tool also lets you sequence external gear (notes and clock sync).
 You can also export the sequences in HTML format (for manual introduction in a DAW). MIDI and SYSEX export is planned for future releases (see: next steps).
 
-You can always run the "help" command to get a list of available commands.
+You can always run the "help" command to get a list of available commands.<br>
+
+There's ways to customize the scales you can generate notes from, as well as the keywords for the accent steps. Respectively, you might want to take a deeper look into the `scales.conf` and `keywords.conf` files :^)
+
+## Note generation algorithm
+
+Note generation is based (almost) entirely on the results of an nmap scan (as of now, in XML format): `nmap (target) -sV --top-ports 16 --open -oX (file.xml)`. <br>
+In order to determine the sequence length (so far, 8 or 16 steps), we take the amount of open ports discovered:
+- If port_amount <= 8, then seq_len = 8
+- If port_amount > 8, then seq_len = 16
+
+Once a sequence of a certain length is created, it is filled with as many active steps as ports have been discovered and as many rest steps as necesary in order to fill the entire sequence. For example:
+- If we've discovered 6 ports with the nmap scan, seq_len will be 8. Out of these 8 steps, 6 will be active and 2 will be rest.
+- If we've discovered 12 ports, seq_len will be 16. Out of these, 12 will be active and 4 will be rest.
+
+In both cases, the rest steps' indexes are randomly assigned to steps within the sequence. <br><br>
+With that part figured out, we now have to decide what notes to assign to the steps.<br>
+The active steps' notes in the sequence are calculated using the following code fragment:
+```python
+degree = service.port % len(scale_notes)
+note = (int(scale_notes[degree])) + OCT_SHIFT # shift to a more reasonable octave
+# scale_notes is a list that contains values obtained from the scales.conf file, customizable by the user
+```
+The above formula obtains the position of the note on the scale based on the result of the port number modulus between the length of the scale determined.
+Then, its value is normalized by adding 3 octaves (constant “OCT_SHIFT”; remember that, by default, scales are defined in octave 0, which are notes that are too low).<br><br>
+
+We don't forget about accents, though! These are determined depending if the port service info associated to the step contains one or more keywords as defined in the `keywords.conf` file. For example, you might wanna look for certain Apache2 versions, certain Windows versions or certain strings in banners that might be of interest for your sequence (or engagement!).<br><br>
+
+We don't forget about tie steps, either! These are a special type of step that is longer than a standard one, thus creating a pitch slide effect between notes. Steps which information is greater in length than a predefined value (as defined on `TIE_THRESHOLD = 30` by default on `scan2acid.py`) will be automatically asigned a tie length.<br><br>
+And last but not least: octave jumps are the only truly randomized parameter in this algorithm. We kept it that way in order to promote the generation of cool, unexpected, happy accidents.<br><br>
+
+Please note this is a work-in-progress; the algorithm will probably be improved in the future. However, it is usable and playable right now, which is the reason why we wanted to publish it. Have fun!
 
 ## Next steps
 
